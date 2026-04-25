@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Where;
 
 
 @Getter
@@ -17,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @Entity
+@Where(clause = "active = true")
 public class Student extends BaseEntity {
 
     @Column(name = "first_name",  nullable = false)
@@ -25,7 +27,7 @@ public class Student extends BaseEntity {
     @Column(name = "last_name")
     private String lastName;
 
-    private String age;
+    private Integer age;
 
     @Column(nullable = false, unique = true)
     private String phone;

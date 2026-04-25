@@ -1,11 +1,14 @@
 package com.example.bolalarakademiyasi.service;
 
 import com.example.bolalarakademiyasi.dto.ApiResponse;
+import com.example.bolalarakademiyasi.dto.AuthDTO;
 import com.example.bolalarakademiyasi.dto.request.*;
+import com.example.bolalarakademiyasi.entity.Class;
 import com.example.bolalarakademiyasi.entity.Student;
 import com.example.bolalarakademiyasi.entity.User;
 import com.example.bolalarakademiyasi.entity.enums.Role;
 import com.example.bolalarakademiyasi.exception.DataNotFoundException;
+import com.example.bolalarakademiyasi.repository.ClassRepository;
 import com.example.bolalarakademiyasi.repository.StudentRepository;
 import com.example.bolalarakademiyasi.repository.UserRepository;
 import com.example.bolalarakademiyasi.security.CustomUserDetails;
@@ -26,15 +29,16 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final StudentRepository studentRepository;
     private final NotificationService notificationService;
+    private final ClassRepository classRepository;
 
 
-    public ApiResponse<String> login(String phone, String password) {
+    public ApiResponse<AuthDTO> login(String phone, String password) {
         Optional<User> optionalUser = userRepository.findByPhoneAndEnabledTrue(phone);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
-            if (!user.isActive()){
+            if (!user.isEnabled()){
                 return ApiResponse.error("User is not enabled");
             }
 
@@ -51,7 +55,8 @@ public class AuthService {
             notificationService.saveNotification(new ReqNotification("Sfera Academy xabarnomasi",
                     "Siz tizimga muvaffaqiyatli kirdingiz!", null, user.getId()));
 
-            return ApiResponse.success(token, userDetails.getRole());
+
+            return ApiResponse.success(authDTO(token, userDetails.getRole()), "Success");
         }
 
         Optional<Student> optionalStudent = studentRepository.findByPhoneAndActiveTrue(phone);
@@ -75,7 +80,7 @@ public class AuthService {
 
             notificationService.saveNotification(new ReqNotification("Sfera Academy xabarnomasi",
                     "Siz tizimga muvaffaqiyatli kirdingiz!", student.getId(), null));
-            return ApiResponse.success(token, userDetails.getRole());
+            return ApiResponse.success(authDTO(token,userDetails.getRole()),"Success");
         }
 
         return ApiResponse.error("User topilmadi");
@@ -102,37 +107,35 @@ public class AuthService {
     }
 
 
-//    @TrackAction(
-//            type = ActionType.STUDENT_CREATED,
-//            description = "Student yaratildi"
-//    )
-//    public ApiResponse<String> saveStudent(ReqStudent reqStudent){
-//
-//        boolean b = studentRepository.existsByPhone(reqStudent.getPhone());
-//
-//        if (b){
-//            return ApiResponse.error("User already exists");
-//        }
-//
-//        User parent = userRepository.findByPhoneAndRole(reqStudent.getParentPhone(), Role.ROLE_PARENT).orElseThrow(
-//                () -> new DataNotFoundException("Parent not found")
-//        );
-//
-//        Group group = groupRepository.findById(reqStudent.getGroupId()).orElseThrow(
-//                () -> new DataNotFoundException("Group not found")
-//        );
-//
-//        Student student = Student.builder()
-//                .fullName(reqStudent.getFullName())
-//                .parent(parent)
-//                .phone(reqStudent.getPhone())
-//                .password(passwordEncoder.encode(reqStudent.getPassword()))
-//                .group(group)
-//                .imgUrl(reqStudent.getImgUrl())
-//                .build();
-//        studentRepository.save(student);
-//        return ApiResponse.success(null, "Successfully saved student");
-//    }
+
+    public ApiResponse<String> saveStudent(ReqStudent reqStudent){
+
+        boolean b = studentRepository.existsByPhone(reqStudent.getPhone());
+
+        if (b){
+            return ApiResponse.error("User already exists");
+        }
+
+        User parent = userRepository.findByPhoneAndRole(reqStudent.getParentPhone(), Role.ROLE_PARENT).orElseThrow(
+                () -> new DataNotFoundException("Parent not found")
+        );
+
+        Class sinf = classRepository.findById(reqStudent.getGroupId()).orElseThrow(
+                () -> new DataNotFoundException("Group not found")
+        );
+
+        Student student = Student.builder()
+                .firstName(reqStudent.getFirstName())
+                .lastName(reqStudent.getLastName())
+                .parent(parent)
+                .phone(reqStudent.getPhone())
+                .password(passwordEncoder.encode(reqStudent.getPassword()))
+                .sinf(sinf)
+                .imgUrl(reqStudent.getImgUrl())
+                .build();
+        studentRepository.save(student);
+        return ApiResponse.success(null, "Successfully saved student");
+    }
 
 
 
@@ -213,6 +216,12 @@ public class AuthService {
 
     }
 
+    private AuthDTO authDTO(String token, String role){
+        return AuthDTO.builder()
+                .token(token)
+                .role(role)
+                .build();
+    }
 
 //    public ApiResponse<String> registerFromTelegram(ReqStudentBot req) {
 //

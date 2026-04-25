@@ -4,6 +4,7 @@ import com.example.bolalarakademiyasi.entity.base.BaseEntity;
 import com.example.bolalarakademiyasi.entity.enums.ShiftEnum;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 @Getter
 @Setter
@@ -11,6 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
+@Where(clause = "active = true")
 public class Class extends BaseEntity {
 
     @Column(nullable = false)
