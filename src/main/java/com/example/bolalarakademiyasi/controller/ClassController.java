@@ -41,7 +41,6 @@ public class ClassController {
     }
 
     @GetMapping("/{classId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse<ResClass>> getOneClass(@PathVariable UUID classId) {
         return ResponseEntity.ok(classService.getOneClass(classId));
     }
@@ -54,23 +53,12 @@ public class ClassController {
         return ResponseEntity.ok(classService.updateClass(reqClassDTO));
     }
 
-    @GetMapping("/list")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<ApiResponse<List<ResClass>>> getAllClasses() {
-        return ResponseEntity.ok(classService.getAllClasses());
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<ResPageable>> getAllClasses(@RequestParam(required = false) String name,
+                                                                  @RequestParam(required = false) String teacherName,
+                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(classService.searchCLass(name, teacherName, page, size));
     }
-
-//    @GetMapping
-//
-//    public ResponseEntity<ApiResponse<ResPageable>> getAllClasses(@RequestParam(required = false) String name,
-//                                                                  @RequestParam(defaultValue = "0") int page,
-//                                                                  @RequestParam(defaultValue = "10") int size) {
-//        return ResponseEntity.ok(classService.getAllClassesSearch(name, page, size));
-//
-//
-//    }
-
-
-
-
 }
