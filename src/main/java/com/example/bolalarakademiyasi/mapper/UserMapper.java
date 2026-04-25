@@ -9,7 +9,7 @@ import java.util.List;
 @Component
 public class UserMapper {
 
-    public UserResponse toResponseUser(User user) {
+    public UserResponse  toResponseUser(User user) {
         return UserResponse.builder()
             .id(user.getId())
             .firstName(user.getFirstName())

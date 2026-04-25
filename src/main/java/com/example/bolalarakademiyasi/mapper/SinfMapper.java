@@ -1,7 +1,7 @@
 package com.example.bolalarakademiyasi.mapper;
 
 import com.example.bolalarakademiyasi.dto.SinfDTO;
-import com.example.bolalarakademiyasi.dto.response.ResSinf;
+import com.example.bolalarakademiyasi.dto.response.ResClass;
 import com.example.bolalarakademiyasi.dto.response.ResSinfDTO;
 import com.example.bolalarakademiyasi.entity.Class;
 import com.example.bolalarakademiyasi.repository.StudentRepository;
@@ -39,13 +39,23 @@ public class SinfMapper {
     }
 
 
-    public ResSinf toDtoRes(Class sinf) {
-        return ResSinf.builder()
+    public ResClass toDtoRes(Class sinf) {
+        return ResClass.builder()
                 .id(sinf.getId())
                 .name(sinf.getName())
                 .teacherFirstName(sinf.getTeacher() != null ? sinf.getTeacher().getFirstName() : null)
                 .teacherLastName(sinf.getTeacher() != null ? sinf.getTeacher().getLastName() : null)
                 .studentCount(studentRepository.countBySinf_id(sinf.getId()))
                 .build();
+    }
+
+    public ResClass toFullDTO (Class sinf) {
+            return  ResClass.builder()
+                    .id(sinf.getId())
+                    .name(sinf.getName())
+                    .teacherFirstName(sinf.getTeacher() != null ? sinf.getTeacher().getFirstName() : null)
+                    .teacherLastName(sinf.getTeacher() != null ? sinf.getTeacher().getLastName() : null)
+                    .studentCount(studentRepository.countBySinf_id(sinf.getId()))
+                    .build();
     }
 }

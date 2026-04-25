@@ -9,7 +9,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ResSinf {
+public class ResClass {
     private UUID id;
     private String name;
     private String teacherFirstName;
