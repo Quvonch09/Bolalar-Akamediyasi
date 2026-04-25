@@ -1,6 +1,7 @@
 package com.example.bolalarakademiyasi.controller;
 
 import com.example.bolalarakademiyasi.dto.ApiResponse;
+import com.example.bolalarakademiyasi.dto.AuthDTO;
 import com.example.bolalarakademiyasi.dto.request.ReqStudent;
 import com.example.bolalarakademiyasi.dto.request.Token;
 import com.example.bolalarakademiyasi.service.AuthService;
@@ -11,14 +12,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @CrossOrigin
 public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<String>> adminLogin(
+    public ResponseEntity<ApiResponse<AuthDTO>> adminLogin(
             @Pattern(
                   regexp = "^998(9[012345789]|6[0123456789]|7[0123456789]|8[0123456789]|3[0123456789]|5[0123456789])[0-9]{7}$",
                   message = "Telefon raqam xato kiritilgan"

@@ -52,8 +52,8 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .addServersItem(new Server().url("https://nazorat.sferaacademy.uz/api"))
-                .addServersItem(new Server().url("http://localhost:8082"))
+//                .addServersItem(new Server().url("https://nazorat.sferaacademy.uz/api"))
+                .addServersItem(new Server().url("http://localhost:8080"))
                 .info(new Info()
                         .title("Bolalar Academy")
                         .description("Bu API hujjatlari loyihangiz uchun Swagger orqali avtomatik yaratiladi.")
