@@ -23,7 +23,14 @@ public interface   ClassRepository extends JpaRepository<Class, UUID> {
     @Query(value = "select g.id from class g where g.teacher_id = :teacherId and g.active = true", nativeQuery = true)
     List<UUID> findIdsByTeacherId(UUID teacherId);
 
-//    Page<Class> searchClass(@Param("name") String name,
-//                          Pageable pageable);
+
+    @Query(value = """
+        select c.* from class c join users u on c.teacher_id = u.id where
+        (:name IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND
+        (:teacherName IS NULL OR LOWER(u.first_name) LIKE LOWER(CONCAT('%', :teacherName, '%'))
+            or LOWER(u.last_name) LIKE LOWER(CONCAT('%', :teacherName, '%'))) order by created_at desc
+        """, nativeQuery = true)
+    Page<Class> searchClass(@Param("name") String name, @Param("teacherName") String teacherName,
+                          Pageable pageable);
 
 }

@@ -97,33 +97,24 @@ public class ClassService {
         return ApiResponse.success(null, "Class updated successfully");
     }
 
-//    public ApiResponse<ResPageable> getAllClassesSearch(String name, int page, int size) {
-//
-//        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").descending());
-//
-////        Page<Class> newClass = classRepository.searchClass(name, pageable);
-////        List<ClassResponse> list = newClass.stream()
-////                .map(sinfMapper::toDtoRes)
-////                .toList();
-//        Page<Class> newClass = classRepository.searchClass(name, pageable);
-//        List<ResClass> list = newClass.stream()
-//                .map(sinfMapper::toDtoRes)
-//                .toList();
-//
-//        if (newClass.isEmpty()) {
-//            return ApiResponse.error("No classes found");
-//        }
-//        ResPageable resPageable = ResPageable.builder()
-//                .page(page)
-//                .size(size)
-//                .totalElements(newClass.getTotalElements())
-//                .totalPage(newClass.getTotalPages())
-//                .body(list)
-//                .build();
-//        return ApiResponse.success(resPageable, "Success");
-//
-//    }
 
+
+    public ApiResponse<ResPageable> searchCLass(String name, String teacherName, int page, int size){
+        Page<Class> classes = classRepository.searchClass(name, teacherName, PageRequest.of(page, size));
+        if (classes.getTotalElements() == 0){
+            throw new DataNotFoundException("Class not found!");
+        }
+
+        List<ResClass> list = classes.getContent().stream().map(sinfMapper::toFullDTO).toList();
+        ResPageable resPageable = ResPageable.builder()
+                .page(page)
+                .size(size)
+                .totalElements(classes.getTotalElements())
+                .totalPage(classes.getTotalPages())
+                .body(list)
+                .build();
+        return ApiResponse.success(resPageable, "Success");
+    }
 
 
 
