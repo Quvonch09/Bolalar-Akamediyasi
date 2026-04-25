@@ -1,7 +1,7 @@
 package com.example.bolalarakademiyasi.entity;
 
 import com.example.bolalarakademiyasi.entity.base.BaseEntity;
-import com.example.bolalarakademiyasi.entity.enums.AttendaceEnum;
+import com.example.bolalarakademiyasi.entity.enums.MarkCategoryStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -11,26 +11,29 @@ import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
 
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@Entity
 @Where(clause = "active = true")
-public class Attendance extends BaseEntity {
+public class Mark extends BaseEntity {
 
     private LocalDate date;
 
     @ManyToOne
     private Student student;
 
-    @ManyToOne
-    private Class sinf;
+    private Integer homeworkScore;
+
+    private Integer activeScore;
+
+    private Integer behaviourScore;
+
+    private Integer totalScore;
 
     @Enumerated(EnumType.STRING)
-    private AttendaceEnum status;
-
-    private String description;
+    private MarkCategoryStatus markCategoryStatus;
 
 }
