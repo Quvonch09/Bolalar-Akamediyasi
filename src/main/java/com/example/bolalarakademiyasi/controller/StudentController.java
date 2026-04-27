@@ -7,7 +7,6 @@ import com.example.bolalarakademiyasi.dto.response.ResPageable;
 import com.example.bolalarakademiyasi.dto.response.ResStudent;
 import com.example.bolalarakademiyasi.security.CustomUserDetails;
 import com.example.bolalarakademiyasi.service.AuthService;
-import com.example.bolalarakademiyasi.service.MarkService;
 import com.example.bolalarakademiyasi.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,6 @@ import java.util.UUID;
 public class StudentController {
 
     private final StudentService studentService;
-    private final MarkService markService;
     private final AuthService authService;
 
     @GetMapping

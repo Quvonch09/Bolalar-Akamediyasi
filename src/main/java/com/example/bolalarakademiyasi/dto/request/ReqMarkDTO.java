@@ -14,5 +14,6 @@ public class ReqMarkDTO {
     private UUID studentId;
     private int homeworkScore;
     private int activityScore;
+    private int behaviourScore;
     private int totalScore;
 }

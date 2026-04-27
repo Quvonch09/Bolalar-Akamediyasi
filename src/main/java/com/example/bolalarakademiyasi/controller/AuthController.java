@@ -2,6 +2,7 @@ package com.example.bolalarakademiyasi.controller;
 
 import com.example.bolalarakademiyasi.dto.ApiResponse;
 import com.example.bolalarakademiyasi.dto.AuthDTO;
+import com.example.bolalarakademiyasi.dto.AuthLogin;
 import com.example.bolalarakademiyasi.dto.request.ReqStudent;
 import com.example.bolalarakademiyasi.dto.request.Token;
 import com.example.bolalarakademiyasi.service.AuthService;
@@ -19,15 +20,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthDTO>> adminLogin(
-            @Pattern(
-                  regexp = "^998(9[012345789]|6[0123456789]|7[0123456789]|8[0123456789]|3[0123456789]|5[0123456789])[0-9]{7}$",
-                  message = "Telefon raqam xato kiritilgan"
-            )
-            @Valid @RequestParam String phone,
-            @RequestParam String password
-    ){
-        return ResponseEntity.ok(authService.login(phone, password));
+    public ResponseEntity<ApiResponse<AuthDTO>> adminLogin(@RequestBody AuthLogin authLogin){
+        return ResponseEntity.ok(authService.login(authLogin));
     }
 
 

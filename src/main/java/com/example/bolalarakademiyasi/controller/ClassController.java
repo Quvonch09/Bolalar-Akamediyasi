@@ -1,6 +1,7 @@
 package com.example.bolalarakademiyasi.controller;
 
 import com.example.bolalarakademiyasi.dto.ApiResponse;
+import com.example.bolalarakademiyasi.dto.SinfDTO;
 import com.example.bolalarakademiyasi.dto.request.ReqClass;
 import com.example.bolalarakademiyasi.dto.request.ReqClassDTO;
 import com.example.bolalarakademiyasi.dto.response.ResClass;
@@ -41,7 +42,7 @@ public class ClassController {
     }
 
     @GetMapping("/{classId}")
-    public ResponseEntity<ApiResponse<ResClass>> getOneClass(@PathVariable UUID classId) {
+    public ResponseEntity<ApiResponse<SinfDTO>> getOneClass(@PathVariable UUID classId) {
         return ResponseEntity.ok(classService.getOneClass(classId));
     }
 

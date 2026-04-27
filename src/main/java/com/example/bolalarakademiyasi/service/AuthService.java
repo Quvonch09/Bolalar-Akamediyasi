@@ -2,6 +2,7 @@ package com.example.bolalarakademiyasi.service;
 
 import com.example.bolalarakademiyasi.dto.ApiResponse;
 import com.example.bolalarakademiyasi.dto.AuthDTO;
+import com.example.bolalarakademiyasi.dto.AuthLogin;
 import com.example.bolalarakademiyasi.dto.request.*;
 import com.example.bolalarakademiyasi.entity.Class;
 import com.example.bolalarakademiyasi.entity.Student;
@@ -32,8 +33,8 @@ public class AuthService {
     private final ClassRepository classRepository;
 
 
-    public ApiResponse<AuthDTO> login(String phone, String password) {
-        Optional<User> optionalUser = userRepository.findByPhoneAndEnabledTrue(phone);
+    public ApiResponse<AuthDTO> login(AuthLogin authLogin) {
+        Optional<User> optionalUser = userRepository.findByPhoneAndEnabledTrue(authLogin.getPhone());
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -42,7 +43,7 @@ public class AuthService {
                 return ApiResponse.error("User is not enabled");
             }
 
-            if (!passwordEncoder.matches(password, user.getPassword())) {
+            if (!passwordEncoder.matches(authLogin.getPassword(), user.getPassword())) {
                 return ApiResponse.error("Invalid password");
             }
 
@@ -59,7 +60,7 @@ public class AuthService {
             return ApiResponse.success(authDTO(token, userDetails.getRole()), "Success");
         }
 
-        Optional<Student> optionalStudent = studentRepository.findByPhoneAndActiveTrue(phone);
+        Optional<Student> optionalStudent = studentRepository.findByPhoneAndActiveTrue(authLogin.getPhone());
 
         if (optionalStudent.isPresent()) {
             Student student = optionalStudent.get();
@@ -68,7 +69,7 @@ public class AuthService {
                 return ApiResponse.error("Student is not active");
             }
 
-            if (!passwordEncoder.matches(password, student.getPassword())) {
+            if (!passwordEncoder.matches(authLogin.getPassword(), student.getPassword())) {
                 return ApiResponse.error("Invalid password");
             }
 
@@ -94,15 +95,7 @@ public class AuthService {
             return ApiResponse.error("Teacher already exists");
         }
 
-        User teacher = User.builder()
-                .phone(authRegister.getPhone())
-                .firstName(authRegister.getFirstname())
-                .lastName(authRegister.getLastName())
-                .password(passwordEncoder.encode(authRegister.getPassword()))
-                .role(role)
-                .active(true)
-                .build();
-        userRepository.save(teacher);
+        save(authRegister, role);
         return ApiResponse.success(null, "Successfully added user");
     }
 
@@ -116,11 +109,14 @@ public class AuthService {
             return ApiResponse.error("User already exists");
         }
 
-        User parent = userRepository.findByPhoneAndRole(reqStudent.getParentPhone(), Role.ROLE_PARENT).orElseThrow(
-                () -> new DataNotFoundException("Parent not found")
-        );
+        User parent = userRepository.findByPhoneAndRole(reqStudent.getParentPhone(), Role.ROLE_PARENT).orElse(null);
+        if (parent == null){
+            parent = save(new AuthRegister(reqStudent.getParentFirstName(),
+                    reqStudent.getParentLastName(), reqStudent.getParentPhone(),
+                    last4(reqStudent.getParentPhone())), Role.ROLE_PARENT);
+        }
 
-        Class sinf = classRepository.findById(reqStudent.getGroupId()).orElseThrow(
+        Class sinf = classRepository.findById(reqStudent.getSinfId()).orElseThrow(
                 () -> new DataNotFoundException("Group not found")
         );
 
@@ -131,7 +127,9 @@ public class AuthService {
                 .phone(reqStudent.getPhone())
                 .password(passwordEncoder.encode(reqStudent.getPassword()))
                 .sinf(sinf)
+                .age(reqStudent.getAge())
                 .imgUrl(reqStudent.getImgUrl())
+                .active(true)
                 .build();
         studentRepository.save(student);
         return ApiResponse.success(null, "Successfully saved student");
@@ -186,14 +184,14 @@ public class AuthService {
                         .role(Role.ROLE_PARENT)
                         .phone(reqStudent.getParentPhone())
                         .password(passwordEncoder.encode(reqStudent.getParentPhone().substring(8,12)))
-                        .active(true)
+                        .enabled(true)
                         .build();
                 userRepository.save(parent);
 
                 //SUBJECT
-//                Group group = groupRepository.findById(reqStudent.getGroupId()).orElseThrow(
-//                        () -> new DataNotFoundException("Group not found")
-//                );
+                Class sinf = classRepository.findById(reqStudent.getSinfId()).orElseThrow(
+                    () -> new DataNotFoundException("Group not found")
+                );
 
                 Student student = Student.builder()
                         .firstName(reqStudent.getFirstName())
@@ -201,7 +199,7 @@ public class AuthService {
                         .parent(parent)
                         .phone(reqStudent.getPhone())
                         .password(passwordEncoder.encode(reqStudent.getPassword()))
-//                        .group(group) SUBJECT
+                        .sinf(sinf) // Subject
                         .imgUrl(reqStudent.getImgUrl())
                         .active(true)
                         .build();
@@ -221,6 +219,17 @@ public class AuthService {
                 .token(token)
                 .role(role)
                 .build();
+    }
+
+    private User save(AuthRegister authRegister, Role role){
+        return userRepository.save(User.builder()
+                .phone(authRegister.getPhone())
+                .firstName(authRegister.getFirstname())
+                .lastName(authRegister.getLastName())
+                .password(passwordEncoder.encode(authRegister.getPassword()))
+                .role(role)
+                .enabled(true)
+                .build());
     }
 
 //    public ApiResponse<String> registerFromTelegram(ReqStudentBot req) {

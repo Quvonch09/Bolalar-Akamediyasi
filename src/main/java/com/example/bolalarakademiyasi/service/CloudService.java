@@ -13,6 +13,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -77,5 +79,32 @@ public class CloudService {
         } else {
             throw new BadRequestException("Fayl yuklashda xatolik: " + response.getStatusCode());
         }
+    }
+
+    public File downloadTempFile(String fileUrl) throws IOException {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + supabaseApiKey);
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<byte[]> response = restTemplate.exchange(
+                fileUrl,
+                HttpMethod.GET,
+                entity,
+                byte[].class
+        );
+
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("File yuklab bo'lmadi");
+        }
+
+        File tempFile = File.createTempFile("book-", ".pdf");
+
+        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+            fos.write(response.getBody());
+        }
+
+        return tempFile;
     }
 }

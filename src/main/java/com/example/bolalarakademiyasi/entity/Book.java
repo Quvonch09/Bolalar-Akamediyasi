@@ -3,10 +3,7 @@ package com.example.bolalarakademiyasi.entity;
 import com.example.bolalarakademiyasi.entity.base.BaseEntity;
 import com.example.bolalarakademiyasi.entity.enums.BookStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +12,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 public class Book extends BaseEntity {
 
@@ -28,7 +26,13 @@ public class Book extends BaseEntity {
     @Column(nullable = false)
     private String pdfUrl;
 
-    private String coverImageUrl;
+    private String coverImagePath;
+
+    @Column(nullable = false)
+    private String originalFileName;
+
+    @Column(nullable = false)
+    private String pdfPath;
 
     @Enumerated(EnumType.STRING)
     private BookStatus status; // PROCESSING, READY, FAILED

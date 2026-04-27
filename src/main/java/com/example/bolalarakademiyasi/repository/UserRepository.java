@@ -23,15 +23,19 @@ public interface  UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByPhoneAndRole(String phone, Role role);
 
     @Query(value = """
-    select u from users u
-    where (:name is null or :name = '' or lower(u.firstName) like lower(concat('%', :name, '%'))
-           or lower(u.lastName) like lower(concat('%', :name, '%')))
-      and (:phone is null or :phone = '' or u.phone like concat('%', :phone, '%'))
-      and (:role is null or u.role = :role) and u.role <> 'ROLE_SUPER_ADMIN' and u.active = true
+    SELECT *
+    FROM users u
+    WHERE (:name IS NULL OR :name = ''
+           OR LOWER(u.first_name) LIKE LOWER(CONCAT('%', :name, '%'))
+           OR LOWER(u.last_name) LIKE LOWER(CONCAT('%', :name, '%')))
+      AND (:phone IS NULL OR :phone = '' OR u.phone LIKE CONCAT('%', :phone, '%'))
+      AND (:role IS NULL OR u.role = :role)
+      AND u.role <> 'ROLE_SUPER_ADMIN'
+      AND u.enabled = true
 """, nativeQuery = true)
     Page<User> searchUser(@Param("name") String name,
                           @Param("phone") String phone,
-                          @Param("role") Role role,
+                          @Param("role") String role,
                           Pageable pageable);
 
     List<User> findAllByRole(Role role);

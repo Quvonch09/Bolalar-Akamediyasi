@@ -29,6 +29,7 @@ public class MarkMapper {
                 .totalScore(mark.getTotalScore())
                 .activityScore(mark.getActiveScore()!= null ? mark.getActiveScore() : 0)
                 .homeworkScore(mark.getHomeworkScore() != null ? mark.getHomeworkScore() : 0)
+                .behaviourScore(mark.getBehaviourScore() != null ? mark.getBehaviourScore() : 0)
                 .markCategoryStatus(mark.getMarkCategoryStatus() != null ? mark.getMarkCategoryStatus().name() : null)
                 .markDate(mark.getDate() != null ? mark.getDate() : null)
                 .build();
@@ -46,6 +47,7 @@ public class MarkMapper {
                 .studentLastName(mark.getStudent() != null ? mark.getStudent().getLastName() : null)
                 .activityScore(mark.getActiveScore())
                 .homeworkScore(mark.getHomeworkScore())
+                .behaviourScore(mark.getBehaviourScore())
                 .markDate(mark.getDate())
                 .build();
     }
