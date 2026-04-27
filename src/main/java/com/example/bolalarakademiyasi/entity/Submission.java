@@ -31,4 +31,6 @@ public class Submission extends BaseEntity {
 
     @ManyToOne
     private Homework homework;
+
+
 }
