@@ -24,8 +24,6 @@ public class MarkController {
     private final MarkService markService;
 
     @PostMapping
-    @Operation(description = "MarkStatus = KUNLIK_BAHO, IMTIHON_BAHO\n " +
-            "Agar imtihon baho bulsa faqat totalScore tuldiriladi, qolgani keremas")
     @PreAuthorize("hasRole('ROLE_TEACHER')")
     public ResponseEntity<ApiResponse<String>> saveMark(@RequestBody ReqMark reqMark){
         return ResponseEntity.ok(markService.saveMark(reqMark));
@@ -35,8 +33,6 @@ public class MarkController {
 
     @PutMapping("/update")
     @PreAuthorize("hasRole('ROLE_TEACHER')")
-    @Operation(description = "MarkStatus = KUNLIK_BAHO, IMTIHON_BAHO\n " +
-            "Agar imtihon baho bulsa faqat totalScore tuldiriladi, qolgani keremas")
     public ResponseEntity<ApiResponse<String>> updateMark(@RequestBody ReqMarkDTO reqMarkDTO){
         return ResponseEntity.ok(markService.updateMark(reqMarkDTO));
     }
@@ -44,8 +40,6 @@ public class MarkController {
 
     @DeleteMapping("/{markId}")
     @PreAuthorize("hasRole('ROLE_TEACHER')")
-    @Operation(description = "MarkStatus = KUNLIK_BAHO, IMTIHON_BAHO\n " +
-            "Agar imtihon baho bulsa faqat totalScore tuldiriladi, qolgani keremas")
     public ResponseEntity<ApiResponse<String>> deleteMark(@PathVariable UUID markId){
         return ResponseEntity.ok(markService.deleteMark(markId));
     }

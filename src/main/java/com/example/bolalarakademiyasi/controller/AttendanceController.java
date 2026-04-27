@@ -2,6 +2,7 @@ package com.example.bolalarakademiyasi.controller;
 
 import com.example.bolalarakademiyasi.dto.ApiResponse;
 import com.example.bolalarakademiyasi.dto.AttendanceDto;
+import com.example.bolalarakademiyasi.dto.request.ReqAttendance;
 import com.example.bolalarakademiyasi.service.AttendanceService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ public class AttendanceController {
             description = "AttendanceEnum -> KELDI, KELMADI, SABABLI \n " +
                     "Keldi bulsa status description null buladi, aks holda desciption yoziladi")
     public ResponseEntity<ApiResponse<String>> saveAttendance(@RequestParam UUID sinfId,
-                                                              @RequestBody List<AttendanceDto> attendanceDtoList) {
-        return ResponseEntity.ok(attendanceService.saveAttendance(sinfId, attendanceDtoList));
+                                                              @RequestBody List<ReqAttendance> reqAttendanceList) {
+        return ResponseEntity.ok(attendanceService.saveAttendance(sinfId, reqAttendanceList));
     }
 
 

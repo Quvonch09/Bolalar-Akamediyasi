@@ -129,7 +129,7 @@ public class UserService {
 
         PageRequest pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
-        Page<User> users = userRepository.searchUser(name, phone, role, pageable);
+        Page<User> users = userRepository.searchUser(name, phone, role != null ? role.name():null, pageable);
 
         List<UserResponse> list = users.stream()
                 .map(mapper::toResponseUser)

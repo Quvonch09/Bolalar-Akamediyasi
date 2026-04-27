@@ -1,5 +1,7 @@
-package com.example.bolalarakademiyasi.entity;
+package com.example.bolalarakademiyasi.dto.response;
 
+import com.example.bolalarakademiyasi.entity.Book;
+import com.example.bolalarakademiyasi.entity.PageBlock;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,24 +14,20 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-public class BookPage {
+public class ResBookPage {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Book book;
+    private String bookTitle;
+    private UUID bookId;
 
     private Integer pageNumber;
 
     // 🔥 cloud image
-    private String imagePath;
+    private String imageUrl;
 
     private Integer width;
     private Integer height;
 
-    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PageBlock> blocks = new ArrayList<>();
 }

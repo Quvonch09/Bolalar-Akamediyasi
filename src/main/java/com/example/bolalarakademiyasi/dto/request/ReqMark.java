@@ -14,6 +14,7 @@ public class ReqMark {
     private UUID studentId;
     private int homeworkScore;
     private int activityScore;
+    private int behaviourScore;
     private int totalScore;
     private LocalDate date;
 }

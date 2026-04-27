@@ -22,8 +22,8 @@ public class ResMark {
     private int totalScore;
     private int activityScore;
     private int homeworkScore;
+    private int behaviourScore;
     private String markCategoryStatus;
-    private String markStatus;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate markDate;
 }

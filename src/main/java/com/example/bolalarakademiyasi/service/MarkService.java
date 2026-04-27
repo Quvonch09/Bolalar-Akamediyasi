@@ -43,12 +43,14 @@ public class MarkService {
         Mark mark;
             int activity = clampScore10(reqMark.getActivityScore(), "activityScore");
             int homework = clampScore10(reqMark.getHomeworkScore(), "homeworkScore");
+            int behaviour = clampScore10(reqMark.getBehaviourScore(), "behaviourScore");
 
-            int score = (activity+ homework);
+            int score = (activity+ homework + behaviour);
             mark = Mark.builder()
                     .student(student)
                     .homeworkScore(homework)
                     .activeScore(activity)
+                    .behaviourScore(behaviour)
                     .totalScore(score)
                     .date(reqMark.getDate())
                     .markCategoryStatus(markCategoryStatus(score))
@@ -79,10 +81,12 @@ public class MarkService {
 
             int activity = clampScore10(reqMarkDTO.getActivityScore(), "activityScore");
             int homework = clampScore10(reqMarkDTO.getHomeworkScore(), "homeworkScore");
+            int behaviour = clampScore10(reqMarkDTO.getBehaviourScore(), "behaviourScore");
 
-            int score = (activity+ homework);
+            int score = (activity+ homework + behaviour);
             mark.setHomeworkScore(homework);
             mark.setActiveScore(activity);
+            mark.setBehaviourScore(behaviour);
             mark.setTotalScore(score);
             mark.setMarkCategoryStatus(markCategoryStatus(score));
             mark.setStudent(student);
@@ -274,11 +278,11 @@ public class MarkService {
     private void plusCoin(int score, Student student){
         int add = 0;
 
-        if (score == 5) {
+        if (score == 10) {
             add = 3;
-        } else if (score == 4) {
+        } else if (score == 7) {
             add = 2;
-        } else if (score == 3) {
+        } else if (score == 5) {
             add = 1;
         }
 
@@ -309,8 +313,8 @@ public class MarkService {
 
     private int clampScore10(Integer score, String field) {
         if (score == null) throw new IllegalArgumentException(field + " is required");
-        if (score < 0 || score > 5) {
-            throw new IllegalArgumentException(field + " must be between 0 and 5");
+        if (score < 1 || score > 10) {
+            throw new IllegalArgumentException(field + " must be between 1 and 10");
         }
         return score;
     }

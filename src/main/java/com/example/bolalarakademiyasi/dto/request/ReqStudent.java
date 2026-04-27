@@ -11,16 +11,18 @@ import java.util.UUID;
 public class ReqStudent {
     private String firstName;
     private String lastName;
+    private int age;
 
     @Pattern(regexp = "^998(9[012345789]|6[0123456789]|7[0123456789]|8[0123456789]|3[0123456789]|5[0123456789])[0-9]{7}$",
     message = "Telefon raqam xato kiritilgan")
     private String phone;
     private String imgUrl;
     private String password;
-    private UUID groupId;
+    private UUID sinfId;
 
     @Pattern(regexp = "^998(9[012345789]|6[0123456789]|7[0123456789]|8[0123456789]|3[0123456789]|5[0123456789])[0-9]{7}$",
     message = "Telefon raqam xato kiritilgan")
     private String parentPhone;
-    private String parentName;
+    private String parentFirstName;
+    private String parentLastName;
 }

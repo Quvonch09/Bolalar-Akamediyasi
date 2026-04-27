@@ -2,6 +2,7 @@ package com.example.bolalarakademiyasi.service;
 
 
 import com.example.bolalarakademiyasi.dto.ApiResponse;
+import com.example.bolalarakademiyasi.dto.SinfDTO;
 import com.example.bolalarakademiyasi.dto.request.ReqClass;
 import com.example.bolalarakademiyasi.dto.request.ReqClassDTO;
 import com.example.bolalarakademiyasi.dto.response.ClassResponse;
@@ -65,11 +66,11 @@ public class ClassService {
     }
 
 
-    public ApiResponse<ResClass> getOneClass(UUID classId) {
+    public ApiResponse<SinfDTO> getOneClass(UUID classId) {
 
         Class foundClass = classRepository.findByIdAndActiveTrue(classId)
                 .orElseThrow(() -> new DataNotFoundException("Class not found!"));
-        return ApiResponse.success(sinfMapper.toFullDTO(foundClass), "Success");
+        return ApiResponse.success(sinfMapper.sinfDto(foundClass), "Success");
 
     }
 

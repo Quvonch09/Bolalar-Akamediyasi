@@ -2,6 +2,8 @@ package com.example.bolalarakademiyasi.service;
 
 import com.example.bolalarakademiyasi.dto.ApiResponse;
 import com.example.bolalarakademiyasi.dto.AttendanceDto;
+import com.example.bolalarakademiyasi.dto.request.ReqAttendance;
+import com.example.bolalarakademiyasi.dto.request.ReqMark;
 import com.example.bolalarakademiyasi.entity.Attendance;
 import com.example.bolalarakademiyasi.entity.Class;
 import com.example.bolalarakademiyasi.entity.Student;
@@ -27,18 +29,26 @@ public class AttendanceService {
     private final StudentRepository studentRepository;
     private final AttendanceMapper attendanceMapper;
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+    private final MarkService markService;
 
 
-
-    public ApiResponse<String> saveAttendance(UUID sinfId, List<AttendanceDto> attendanceDtoList){
+    public ApiResponse<String> saveAttendance(UUID sinfId, List<ReqAttendance> reqAttendanceList){
         Class sinf = classRepository.findById(sinfId).orElseThrow(
                 () -> new DataNotFoundException("Class not found")
         );
 
-        for (AttendanceDto attendanceDto : attendanceDtoList) {
+        for (ReqAttendance attendanceDto : reqAttendanceList) {
             Student student = studentRepository.findById(attendanceDto.getStudentId()).orElseThrow(
                     () -> new DataNotFoundException("Student not found")
             );
+
+            markService.saveMark(ReqMark.builder()
+                    .activityScore(attendanceDto.getActivityScore())
+                    .behaviourScore(attendanceDto.getBehaviourScore())
+                    .homeworkScore(attendanceDto.getHomeworkScore())
+                    .studentId(student.getId())
+                    .build());
+
 
             if (attendanceRepository.findByStudentIdAndDate(student.getId(), attendanceDto.getDate()) == null) {
                 Attendance attendance = Attendance.builder()

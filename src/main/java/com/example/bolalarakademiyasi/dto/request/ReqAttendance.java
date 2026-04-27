@@ -1,4 +1,4 @@
-package com.example.bolalarakademiyasi.dto;
+package com.example.bolalarakademiyasi.dto.request;
 
 import com.example.bolalarakademiyasi.entity.enums.AttendaceEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,20 +12,17 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AttendanceDto {
-
-    @Schema(hidden = true)
-    private UUID id;
-
-    @Schema(hidden = true)
-    private String firstName;
-
-    @Schema(hidden = true)
-    private String lastName;
+public class ReqAttendance {
 
     private UUID studentId;
 
     private AttendaceEnum status;
+
+    private Integer homeworkScore;
+
+    private Integer activityScore;
+
+    private Integer behaviourScore;
 
     private String description;
 
