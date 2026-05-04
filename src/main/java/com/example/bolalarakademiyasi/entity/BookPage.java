@@ -25,7 +25,7 @@ public class BookPage {
     private Integer pageNumber;
 
     // 🔥 cloud image
-    private String imagePath;
+    private String imageUrl;
 
     private Integer width;
     private Integer height;

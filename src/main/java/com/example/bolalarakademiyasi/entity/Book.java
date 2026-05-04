@@ -22,17 +22,14 @@ public class Book extends BaseEntity {
     @Column(columnDefinition = "text")
     private String description;
 
-    //  STORAGE (cloud)
+    // Main file URL returned by /api/v1/files/upload
     @Column(nullable = false)
-    private String pdfUrl;
+    private String fileUrl;
 
-    private String coverImagePath;
+    private String coverImageUrl;
 
     @Column(nullable = false)
     private String originalFileName;
-
-    @Column(nullable = false)
-    private String pdfPath;
 
     @Enumerated(EnumType.STRING)
     private BookStatus status; // PROCESSING, READY, FAILED

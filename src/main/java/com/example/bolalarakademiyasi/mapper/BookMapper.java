@@ -23,15 +23,32 @@ public class BookMapper {
                 .status(book.getStatus().name())
                 .subjectName(book.getSubject() != null ? book.getSubject().getName() : null)
                 .subjectId(book.getSubject() != null ? book.getSubject().getId() : null)
-                .coverImageUrl(book.getCoverImagePath())
-                .pdfUrl(book.getPdfUrl())
+                .coverImageUrl(resolveUrl(book.getCoverImageUrl()))
+                .fileUrl(resolveUrl(book.getFileUrl()))
                 .originalFileName(book.getOriginalFileName())
                 .gradeLevel(book.getGradeLevel())
                 .lessonId(book.getLesson() != null ? book.getLesson().getId() : null)
                 .lessonName(book.getLesson() != null ? book.getLesson().getName() : null)
-                .pdfPath(book.getPdfPath())
                 .totalPages(book.getTotalPages())
-                .pages(book.getPages())
+                .pages(book.getPages().stream().map(this::toPageResponse).toList())
+                .build();
+    }
+
+
+    public ResBook resBookDto(Book book){
+        return ResBook.builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .description(book.getDescription())
+                .status(book.getStatus().name())
+                .subjectName(book.getSubject() != null ? book.getSubject().getName() : null)
+                .fileUrl(resolveUrl(book.getFileUrl()))
+                .coverImageUrl(resolveUrl(book.getCoverImageUrl()))
+                .gradeLevel(book.getGradeLevel())
+                .subjectId(book.getSubject() != null ? book.getSubject().getId() : null)
+                .lessonName(book.getLesson() != null ? book.getLesson().getName() : null)
+                .lessonId(book.getLesson() != null ? book.getLesson().getId() : null)
+                .totalPages(book.getTotalPages())
                 .build();
     }
 
@@ -43,9 +60,9 @@ public class BookMapper {
                 .bookTitle(bookPage.getBook() != null ? bookPage.getBook().getTitle() : null)
                 .width(bookPage.getWidth())
                 .height(bookPage.getHeight())
-                .blocks(bookPage.getBlocks())
+                .blocks(bookPage.getBlocks().stream().map(this::toBlockResponse).toList())
                 .pageNumber(bookPage.getPageNumber())
-                .imageUrl(bookPage.getImagePath())
+                .imageUrl(resolveUrl(bookPage.getImageUrl()))
                 .build();
     }
 
@@ -56,8 +73,8 @@ public class BookMapper {
                 book.getTitle(),
                 book.getDescription(),
                 book.getOriginalFileName(),
-                toPublicUrl(book.getPdfPath()),
-                toPublicUrl(book.getCoverImagePath()),
+                resolveUrl(book.getFileUrl()),
+                resolveUrl(book.getCoverImageUrl()),
                 book.getStatus().name(),
                 book.getTotalPages(),
                 book.getCreatedAt(),
@@ -69,7 +86,7 @@ public class BookMapper {
         return new BookPageResponse(
                 page.getId(),
                 page.getPageNumber(),
-                toPublicUrl(page.getImagePath()),
+                resolveUrl(page.getImageUrl()),
                 page.getWidth(),
                 page.getHeight(),
                 page.getBlocks().stream().map(this::toBlockResponse).toList()
@@ -91,10 +108,12 @@ public class BookMapper {
         );
     }
 
-    private String toPublicUrl(String relativePath) {
-        if (relativePath == null || relativePath.isBlank()) {
-            return null;
+    private String resolveUrl(String... candidates) {
+        for (String candidate : candidates) {
+            if (candidate != null && !candidate.isBlank()) {
+                return candidate;
+            }
         }
-        return "/storage/" + relativePath.replace("\\", "/");
+        return null;
     }
 }
