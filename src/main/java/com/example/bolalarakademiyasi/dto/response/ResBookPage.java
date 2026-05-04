@@ -1,8 +1,7 @@
 package com.example.bolalarakademiyasi.dto.response;
 
-import com.example.bolalarakademiyasi.entity.Book;
+import com.example.bolalarakademiyasi.dto.PageBlockResponse;
 import com.example.bolalarakademiyasi.entity.PageBlock;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -29,5 +28,5 @@ public class ResBookPage {
     private Integer width;
     private Integer height;
 
-    private List<PageBlock> blocks = new ArrayList<>();
+    private List<PageBlockResponse> blocks = new ArrayList<>();
 }
