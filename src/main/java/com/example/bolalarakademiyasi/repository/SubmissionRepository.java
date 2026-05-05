@@ -18,7 +18,6 @@ public interface SubmissionRepository extends JpaRepository<Submission, UUID> {
 
     Page<Submission> findAllByActiveTrue(Pageable pageable);
 
-    // Admin uchun Filter Query
     @Query("SELECT s FROM Submission s WHERE s.active = true " +
            "AND (:studentName IS NULL OR LOWER(s.student.firstName) LIKE LOWER(CONCAT('%', :studentName, '%')) OR LOWER(s.student.lastName) LIKE LOWER(CONCAT('%', :studentName, '%'))) " +
            "AND (:homeworkTitle IS NULL OR LOWER(s.homework.title) LIKE LOWER(CONCAT('%', :homeworkTitle, '%'))) " +

@@ -21,14 +21,15 @@ public class SubmissionController {
 
     private final SubmissionService submissionService;
 
-    // 1. Student yuklaydi
+
+
+
     @PostMapping
 
     public ResponseEntity<ApiResponse<String>> saveSubmission(@RequestBody ReqSubmission req) {
         return ResponseEntity.ok(submissionService.saveSubmission(req));
     }
 
-    // 2. Teacher tekshiradi
     @PutMapping("/{id}/grade")
     @PreAuthorize("hasRole('ROLE_TEACHER')")
     public ResponseEntity<ApiResponse<String>> gradeSubmission(
@@ -37,8 +38,6 @@ public class SubmissionController {
         return ResponseEntity.ok(submissionService.gradeSubmission(id, req));
     }
 
-    // 3. Admin barcha vazifalarni ko'radi
-    // Admin barcha vazifalarni ko'radi va filter qiladi
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public ResponseEntity<ApiResponse<ResPageable>> getAllSubmissions(
@@ -53,7 +52,8 @@ public class SubmissionController {
         ));
     }
 
-    // 4. Update API (Student o'z javobini yangilaydi)
+
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> updateSubmission(
             @PathVariable UUID id, 
@@ -61,24 +61,20 @@ public class SubmissionController {
         return ResponseEntity.ok(submissionService.updateSubmission(id, req));
     }
 
-    // 4. Delete API
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteSubmission(@PathVariable UUID id) {
         return ResponseEntity.ok(submissionService.deleteSubmission(id));
     }
 
-    // Bitta submission'ni olish
+
+
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ResSubmission>> getOneSubmission(@PathVariable UUID id) {
         return ResponseEntity.ok(submissionService.getOneSubmission(id));
     }
 
-    // Bitta uyga vazifaga yuborilgan barcha javoblarni olish (Teacher uchun qulay)
-    @GetMapping("/homework/{homeworkId}")
-    public ResponseEntity<ApiResponse<ResPageable>> getSubmissionsByHomework(
-            @PathVariable UUID homeworkId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(submissionService.getSubmissionsByHomework(homeworkId, page, size));
-    }
+
 }

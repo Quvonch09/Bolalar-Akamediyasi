@@ -31,7 +31,6 @@ public class SubmissionService {
     private final StudentRepository studentRepository;
     private final SubmissionMapper submissionMapper;
 
-    // 1. Student vazifa yuklaydi
     public ApiResponse<String> saveSubmission(ReqSubmission req) {
         Homework homework = homeworkRepository.findByIdAndActiveTrue(req.getHomeworkId()).orElseThrow(
                 () -> new DataNotFoundException("Homework not found")
@@ -52,7 +51,8 @@ public class SubmissionService {
         return ApiResponse.success(null, "Submission saved successfully");
     }
 
-    // 2. Teacher tekshiradi va baholaydi
+
+
     public ApiResponse<String> gradeSubmission(UUID submissionId, ReqGradeSubmission req) {
         Submission submission = submissionRepository.findByIdAndActiveTrue(submissionId).orElseThrow(
                 () -> new DataNotFoundException("Submission not found")
@@ -65,10 +65,10 @@ public class SubmissionService {
         return ApiResponse.success(null, "Submission graded successfully");
     }
 
-    // 3. Admin barcha uyga vazifalarni ko'radi
+
+
     public ApiResponse<ResPageable> getAllSubmissions(String studentName, String homeworkTitle, Boolean isGraded, int page, int size) {
 
-        // Barcha filterlarni Repository'dagi searchSubmissions metodiga beramiz
         Page<Submission> submissions = submissionRepository.searchSubmissions(
                 studentName, homeworkTitle, isGraded, PageRequest.of(page, size)
         );
@@ -91,7 +91,8 @@ public class SubmissionService {
         return ApiResponse.success(resPageable, "Success");
     }
 
-    // 4. Update (Student o'z javobini o'zgartirishi)
+
+
     public ApiResponse<String> updateSubmission(UUID submissionId, ReqUpdateSubmission req) {
         Submission submission = submissionRepository.findByIdAndActiveTrue(submissionId).orElseThrow(
                 () -> new DataNotFoundException("Submission not found")
@@ -107,8 +108,6 @@ public class SubmissionService {
         submissionRepository.save(submission);
         return ApiResponse.success(null, "Submission updated successfully");
     }
-
-    // 4. Delete API
     public ApiResponse<String> deleteSubmission(UUID submissionId) {
         Submission submission = submissionRepository.findByIdAndActiveTrue(submissionId).orElseThrow(
                 () -> new DataNotFoundException("Submission not found")
@@ -119,8 +118,6 @@ public class SubmissionService {
 
         return ApiResponse.success(null, "Submission deleted successfully");
     }
-
-    // Yordamchi metodlar (Ma'lum bir vazifaga tegishli javoblarni olish)
     public ApiResponse<ResPageable> getSubmissionsByHomework(UUID homeworkId, int page, int size) {
         homeworkRepository.findByIdAndActiveTrue(homeworkId).orElseThrow(
                 () -> new DataNotFoundException("Homework not found")

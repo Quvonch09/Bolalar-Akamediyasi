@@ -20,8 +20,8 @@ public class Submission extends BaseEntity {
 
     private String fileUrl;
 
-//    @Max(10)
-//    @Min(0)
+    @Max(10)
+    @Min(0)
     private Integer score; // 10 ball
 
     private String feedback;
