@@ -20,6 +20,8 @@ public class FeedbackMapper {
                 .title(feedback.getTitle())
                 .rating(feedback.getRating())
                 .teacherId(feedback.getTeacher() != null ? feedback.getTeacher().getId() : null)
+                .teacherName(feedback.getTeacher() != null ? feedback.getTeacher().getFirstName() : null)
+                .teacherName(feedback.getTeacher() != null ? feedback.getTeacher().getLastName() : null)
                 .build();
     }
 

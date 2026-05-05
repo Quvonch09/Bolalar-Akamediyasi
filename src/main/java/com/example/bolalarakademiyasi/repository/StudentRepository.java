@@ -14,8 +14,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student, UUID> {
+public interface  StudentRepository extends JpaRepository<Student, UUID> {
     Optional<Student> findByPhoneAndActiveTrue(String phone);
+    Optional<Student> findByIdAndActiveTrue(UUID id);
     boolean existsByPhone(String phoneNumber);
     List<Student> findAllBySinf_idAndActiveTrue(UUID sinfId);
 

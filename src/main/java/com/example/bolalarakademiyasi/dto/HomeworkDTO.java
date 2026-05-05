@@ -33,6 +33,5 @@ public class HomeworkDTO {
 
     private UUID lessonId;
 
-    @Schema(hidden = true)
     private String lessonName;
 }

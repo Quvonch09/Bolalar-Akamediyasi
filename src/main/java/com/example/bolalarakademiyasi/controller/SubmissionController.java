@@ -1,0 +1,84 @@
+package com.example.bolalarakademiyasi.controller;
+
+import com.example.bolalarakademiyasi.dto.ApiResponse;
+import com.example.bolalarakademiyasi.dto.request.ReqGradeSubmission;
+import com.example.bolalarakademiyasi.dto.request.ReqSubmission;
+import com.example.bolalarakademiyasi.dto.request.ReqUpdateSubmission;
+import com.example.bolalarakademiyasi.dto.response.ResPageable;
+import com.example.bolalarakademiyasi.dto.response.ResSubmission;
+import com.example.bolalarakademiyasi.service.SubmissionService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/v1/submissions")
+@RequiredArgsConstructor
+public class SubmissionController {
+
+    private final SubmissionService submissionService;
+
+    // 1. Student yuklaydi
+    @PostMapping
+
+    public ResponseEntity<ApiResponse<String>> saveSubmission(@RequestBody ReqSubmission req) {
+        return ResponseEntity.ok(submissionService.saveSubmission(req));
+    }
+
+    // 2. Teacher tekshiradi
+    @PutMapping("/{id}/grade")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
+    public ResponseEntity<ApiResponse<String>> gradeSubmission(
+            @PathVariable UUID id, 
+            @RequestBody ReqGradeSubmission req) {
+        return ResponseEntity.ok(submissionService.gradeSubmission(id, req));
+    }
+
+    // 3. Admin barcha vazifalarni ko'radi
+    // Admin barcha vazifalarni ko'radi va filter qiladi
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
+    public ResponseEntity<ApiResponse<ResPageable>> getAllSubmissions(
+            @RequestParam(required = false) String studentName,
+            @RequestParam(required = false) String homeworkTitle,
+            @RequestParam(required = false) Boolean isGraded,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(submissionService.getAllSubmissions(
+                studentName, homeworkTitle, isGraded, page, size
+        ));
+    }
+
+    // 4. Update API (Student o'z javobini yangilaydi)
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<String>> updateSubmission(
+            @PathVariable UUID id, 
+            @RequestBody ReqUpdateSubmission req) {
+        return ResponseEntity.ok(submissionService.updateSubmission(id, req));
+    }
+
+    // 4. Delete API
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<String>> deleteSubmission(@PathVariable UUID id) {
+        return ResponseEntity.ok(submissionService.deleteSubmission(id));
+    }
+
+    // Bitta submission'ni olish
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<ResSubmission>> getOneSubmission(@PathVariable UUID id) {
+        return ResponseEntity.ok(submissionService.getOneSubmission(id));
+    }
+
+    // Bitta uyga vazifaga yuborilgan barcha javoblarni olish (Teacher uchun qulay)
+    @GetMapping("/homework/{homeworkId}")
+    public ResponseEntity<ApiResponse<ResPageable>> getSubmissionsByHomework(
+            @PathVariable UUID homeworkId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(submissionService.getSubmissionsByHomework(homeworkId, page, size));
+    }
+}

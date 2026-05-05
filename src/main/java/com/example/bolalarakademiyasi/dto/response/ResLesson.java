@@ -2,7 +2,6 @@ package com.example.bolalarakademiyasi.dto.response;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -10,15 +9,20 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ResFeedback {
 
+public class ResLesson {
     private UUID id;
 
-    private String title;
+    private String name;
 
-    private int rating;
+    private String description;
 
-    private UUID teacherId;
+    private String fileUrl;
 
-    private String teacherName;
+    private UUID subjectId;
+
+    private String subjectName;
+
+
+
 }

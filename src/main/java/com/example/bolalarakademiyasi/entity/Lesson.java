@@ -13,9 +13,13 @@ import lombok.*;
 @Entity
 public class Lesson extends BaseEntity {
     private String name;
+
     private String description;
+
     private String fileUrl; //dars ishlanmasi
 
     @ManyToOne
     private Subject subject;
+
+
 }

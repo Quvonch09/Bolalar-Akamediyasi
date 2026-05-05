@@ -65,7 +65,7 @@ public class BookService {
             }
 
             Lesson lesson = lessonRepository.findById(reqBook.getLessonId()).orElseThrow(
-                    () -> new DataNotFoundException("Lesson not found!")
+                    () -> new DataNotFoundException("LessonMapper not found!")
             );
 
             Subject subject = subjectRepository.findById(reqBook.getSubjectId()).orElseThrow(
