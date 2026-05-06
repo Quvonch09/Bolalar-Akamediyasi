@@ -68,9 +68,16 @@ public class SubmissionService {
 
 
     public ApiResponse<ResPageable> getAllSubmissions(String studentName, String homeworkTitle, Boolean isGraded, int page, int size) {
+        String safeStudentName = (studentName != null && !studentName.trim().isEmpty())
+                ? "%" + studentName.trim().toLowerCase() + "%"
+                : null;
+
+        String safeHomeworkTitle = (homeworkTitle != null && !homeworkTitle.trim().isEmpty())
+                ? "%" + homeworkTitle.trim().toLowerCase() + "%"
+                : null;
 
         Page<Submission> submissions = submissionRepository.searchSubmissions(
-                studentName, homeworkTitle, isGraded, PageRequest.of(page, size)
+                safeStudentName, safeHomeworkTitle, isGraded, PageRequest.of(page, size)
         );
 
         if (submissions.isEmpty()) {

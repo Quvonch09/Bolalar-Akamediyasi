@@ -2,7 +2,7 @@ package com.example.bolalarakademiyasi.repository;
 
 import com.example.bolalarakademiyasi.entity.Submission;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable; // MUHIM: Shu importni to'g'riladik
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,10 +18,20 @@ public interface SubmissionRepository extends JpaRepository<Submission, UUID> {
 
     Page<Submission> findAllByActiveTrue(Pageable pageable);
 
-    @Query("SELECT s FROM Submission s WHERE s.active = true " +
-           "AND (:studentName IS NULL OR LOWER(s.student.firstName) LIKE LOWER(CONCAT('%', :studentName, '%')) OR LOWER(s.student.lastName) LIKE LOWER(CONCAT('%', :studentName, '%'))) " +
-           "AND (:homeworkTitle IS NULL OR LOWER(s.homework.title) LIKE LOWER(CONCAT('%', :homeworkTitle, '%'))) " +
-           "AND (:isGraded IS NULL OR (:isGraded = true AND s.score > 0) OR (:isGraded = false AND (s.score = 0 OR s.score IS NULL)))")
+    @Query(value = "SELECT s FROM Submission s " +
+                   "LEFT JOIN s.student st " +
+                   "LEFT JOIN s.homework hw " +
+                   "WHERE s.active = true " +
+                   "AND (:studentName IS NULL OR LOWER(st.firstName) LIKE :studentName OR LOWER(st.lastName) LIKE :studentName) " +
+                   "AND (:homeworkTitle IS NULL OR LOWER(hw.title) LIKE :homeworkTitle) " +
+                   "AND (:isGraded IS NULL OR (:isGraded = true AND s.score > 0) OR (:isGraded = false AND (s.score = 0 OR s.score IS NULL)))",
+           countQuery = "SELECT COUNT(s) FROM Submission s " +
+                        "LEFT JOIN s.student st " +
+                        "LEFT JOIN s.homework hw " +
+                        "WHERE s.active = true " +
+                        "AND (:studentName IS NULL OR LOWER(st.firstName) LIKE :studentName OR LOWER(st.lastName) LIKE :studentName) " +
+                        "AND (:homeworkTitle IS NULL OR LOWER(hw.title) LIKE :homeworkTitle) " +
+                        "AND (:isGraded IS NULL OR (:isGraded = true AND s.score > 0) OR (:isGraded = false AND (s.score = 0 OR s.score IS NULL)))")
     Page<Submission> searchSubmissions(
             @Param("studentName") String studentName,
             @Param("homeworkTitle") String homeworkTitle,

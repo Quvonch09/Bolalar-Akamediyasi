@@ -7,6 +7,7 @@ import com.example.bolalarakademiyasi.dto.request.ReqUpdateSubmission;
 import com.example.bolalarakademiyasi.dto.response.ResPageable;
 import com.example.bolalarakademiyasi.dto.response.ResSubmission;
 import com.example.bolalarakademiyasi.service.SubmissionService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,13 +26,13 @@ public class SubmissionController {
 
 
     @PostMapping
-
     public ResponseEntity<ApiResponse<String>> saveSubmission(@RequestBody ReqSubmission req) {
         return ResponseEntity.ok(submissionService.saveSubmission(req));
     }
 
     @PutMapping("/{id}/grade")
     @PreAuthorize("hasRole('ROLE_TEACHER')")
+    @Operation(description = "Bu API Faqat Teacher Baholashi uchun ")
     public ResponseEntity<ApiResponse<String>> gradeSubmission(
             @PathVariable UUID id, 
             @RequestBody ReqGradeSubmission req) {
@@ -40,6 +41,7 @@ public class SubmissionController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
+    @Operation(description = "Bu API Faqat Admin uchun ")
     public ResponseEntity<ApiResponse<ResPageable>> getAllSubmissions(
             @RequestParam(required = false) String studentName,
             @RequestParam(required = false) String homeworkTitle,
