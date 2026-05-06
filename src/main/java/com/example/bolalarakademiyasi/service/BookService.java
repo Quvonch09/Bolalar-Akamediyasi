@@ -68,6 +68,11 @@ public class BookService {
         Book book = new Book();
         applyMetadata(book, reqBook);
 
+
+            Lesson lesson = lessonRepository.findById(reqBook.getLessonId()).orElseThrow(
+                    () -> new DataNotFoundException("LessonMapper not found!")
+            );
+
         Path tempDirectory = createTempBookDirectory();
         Path pdfPath = tempDirectory.resolve("source.pdf");
 

@@ -27,7 +27,8 @@ public class HomeworkController {
 
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER')")
+    @Operation(description = " DeadlineEnum Type = HOUR, DAY, WEEK, MONTH")
     public ResponseEntity<ApiResponse<String>> save(@RequestBody ReqHomework reqHomework) {
         return ResponseEntity.ok(homeworkService.saveHomework(reqHomework));
     }
@@ -35,7 +36,7 @@ public class HomeworkController {
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER')")
     public ResponseEntity<ApiResponse<String>> delete(@PathVariable UUID id) {
         return ResponseEntity.ok(homeworkService.deleteHomework(id));
     }
@@ -46,7 +47,7 @@ public class HomeworkController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER')")
     public ResponseEntity<ApiResponse<String>> update(@PathVariable UUID id, @RequestBody ReqHomework reqHomework) {
         return ResponseEntity.ok(homeworkService.updateHomework(id, reqHomework));
     }

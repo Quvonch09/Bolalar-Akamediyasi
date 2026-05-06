@@ -29,7 +29,7 @@ public class HomeworkService {
 
     public ApiResponse<String> saveHomework(ReqHomework reqHomework) {
         Lesson lesson = lessonRepository.findById(reqHomework.getLessonId()).orElseThrow(
-                ()-> new DataNotFoundException("Lesson not found")
+                ()-> new DataNotFoundException("LessonMapper not found")
         );
 
         Homework homework = Homework.builder()

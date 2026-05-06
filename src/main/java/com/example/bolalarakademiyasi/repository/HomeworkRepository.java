@@ -17,8 +17,6 @@ import java.util.UUID;
 @Repository
 public interface HomeworkRepository extends JpaRepository<Homework, UUID> {
 
-//    List<Homework> findAllByStudentIdAndActiveTrue(UUID teacherId);
-
 
     Optional<Homework> findByIdAndActiveTrue(UUID id);
 
@@ -40,18 +38,32 @@ public interface HomeworkRepository extends JpaRepository<Homework, UUID> {
 
 
 
+//    @Query(value = """
+//            SELECT h.* FROM homework h
+//            JOIN lesson l ON h.lesson_id = l.id
+//            WHERE h.active = true
+//            AND (:title IS NULL OR LOWER(h.title) LIKE LOWER(CONCAT('%', :title, '%')))
+//            AND (:deadlineEnum IS NULL OR h.deadline_enum = :deadlineEnum)
+//            AND (:lessonTitle IS NULL OR LOWER(l.title) LIKE LOWER(CONCAT('%', :lessonTitle, '%')))
+//            ORDER BY h.created_at DESC
+//            """, nativeQuery = true)
+//    Page<Homework> searchHomework(@Param("title") String title,
+//                                  @Param("deadlineEnum") String deadlineEnum,
+//                                  @Param("lessonTitle") String lessonTitle,
+//                                  Pageable pageable);
+
+
     @Query(value = """
-            SELECT h.* FROM homework h
-            JOIN lesson l ON h.lesson_id = l.id
-            WHERE h.active = true
-            AND (:title IS NULL OR LOWER(h.title) LIKE LOWER(CONCAT('%', :title, '%')))
-            AND (:deadlineEnum IS NULL OR h.deadline_enum = :deadlineEnum)
-            AND (:lessonTitle IS NULL OR LOWER(l.title) LIKE LOWER(CONCAT('%', :lessonTitle, '%')))
-            ORDER BY h.created_at DESC
-            """, nativeQuery = true)
+        SELECT h.* FROM homework h
+        LEFT JOIN lesson l ON h.lesson_id = l.id
+        WHERE h.active = true
+        AND (:title IS NULL OR LOWER(h.title) LIKE LOWER(CONCAT('%', :title, '%')))
+        AND (:deadlineEnum IS NULL OR h.deadline_enum = :deadlineEnum)
+        AND (:lessonTitle IS NULL OR LOWER(l.name) LIKE LOWER(CONCAT('%', :lessonTitle, '%')))
+        ORDER BY h.created_at DESC
+        """, nativeQuery = true)
     Page<Homework> searchHomework(@Param("title") String title,
                                   @Param("deadlineEnum") String deadlineEnum,
                                   @Param("lessonTitle") String lessonTitle,
                                   Pageable pageable);
-
 }

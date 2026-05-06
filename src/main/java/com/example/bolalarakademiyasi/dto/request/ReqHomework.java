@@ -24,7 +24,7 @@ public class ReqHomework {
     @Enumerated(EnumType.STRING)
     private DeadlineEnum deadlineEnum;  // deadline turi -> soat, kun, hafta, oy
 
-    @NotBlank(message = "Lesson ID si bush bulishi mumkin emas")
+    @NotBlank(message = "LessonMapper ID si bush bulishi mumkin emas")
     private UUID lessonId;
 
 
