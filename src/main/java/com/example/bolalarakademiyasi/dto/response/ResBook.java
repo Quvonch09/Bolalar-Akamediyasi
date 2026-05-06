@@ -1,9 +1,11 @@
 package com.example.bolalarakademiyasi.dto.response;
 
+import com.example.bolalarakademiyasi.dto.BookPageResponse;
 import com.example.bolalarakademiyasi.entity.BookPage;
 import com.example.bolalarakademiyasi.entity.Lesson;
 import com.example.bolalarakademiyasi.entity.Subject;
 import com.example.bolalarakademiyasi.entity.enums.BookStatus;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResBook {
 
     private UUID id;
@@ -24,14 +27,12 @@ public class ResBook {
 
     private String description;
 
-    //  STORAGE (cloud)
-    private String pdfUrl;
+    // Main file URL stored in Cloudflare
+    private String fileUrl;
 
     private String coverImageUrl;
 
     private String originalFileName;
-
-    private String pdfPath;
 
     private String status; // PROCESSING, READY, FAILED
 
@@ -47,5 +48,5 @@ public class ResBook {
     private UUID lessonId;
 
     //  RELATION
-    private List<BookPage> pages = new ArrayList<>();
+    private List<BookPageResponse> pages = new ArrayList<>();
 }

@@ -9,7 +9,7 @@ public record BookResponse(
         String title,
         String description,
         String originalFileName,
-        String pdfUrl,
+        String fileUrl,
         String coverImageUrl,
         String status,
         int totalPages,
