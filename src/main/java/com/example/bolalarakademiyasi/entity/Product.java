@@ -1,9 +1,8 @@
 package com.example.bolalarakademiyasi.entity;
 
 import com.example.bolalarakademiyasi.entity.base.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.*;
 
 @Getter
@@ -12,17 +11,15 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Lesson extends BaseEntity {
+public class Product extends BaseEntity { // coin almashadigan productlar
+
+    @Column(nullable = false)
     private String name;
 
+    @Column(length = 500)
     private String description;
 
-    private String fileUrl; //dars ishlanmasi
+    private int countCoin;
 
-    @ManyToOne
-    private Subject subject;
-
-    @OneToOne(mappedBy = "lesson")
-    private VideoLesson videoLesson;
-
+    private String imgUrl;
 }

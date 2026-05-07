@@ -23,6 +23,7 @@ public class ResLesson {
 
     private String subjectName;
 
+    private ResVideoLesson videoLesson;
 
 
 }

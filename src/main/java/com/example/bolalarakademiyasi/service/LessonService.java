@@ -1,14 +1,11 @@
 package com.example.bolalarakademiyasi.service;
 
 import com.example.bolalarakademiyasi.dto.ApiResponse;
-import com.example.bolalarakademiyasi.dto.request.ReqFeedback;
 import com.example.bolalarakademiyasi.dto.request.ReqLesson;
 import com.example.bolalarakademiyasi.dto.response.ResLesson;
 import com.example.bolalarakademiyasi.dto.response.ResPageable;
-import com.example.bolalarakademiyasi.entity.Feedback;
 import com.example.bolalarakademiyasi.entity.Lesson;
 import com.example.bolalarakademiyasi.entity.Subject;
-import com.example.bolalarakademiyasi.entity.User;
 import com.example.bolalarakademiyasi.exception.DataNotFoundException;
 import com.example.bolalarakademiyasi.mapper.LessonMapper;
 import com.example.bolalarakademiyasi.repository.LessonRepository;
@@ -28,6 +25,7 @@ public class LessonService {
     private  final LessonRepository lessonRepository;
     private  final SubjectRepository subjectRepository;
     private final LessonMapper lessonMapper;
+    private final VideoLessonService videoLessonService;
 
 
     public ApiResponse<String> saveLesson(ReqLesson reqLesson){
@@ -40,7 +38,8 @@ public class LessonService {
                 .fileUrl(reqLesson.getFileUrl())
                 .subject(subject)
                 .build();
-        lessonRepository.save(lesson);
+        Lesson savedLesson = lessonRepository.save(lesson);
+        videoLessonService.createIfHasDetails(savedLesson, reqLesson.getVideoLesson());
         return ApiResponse.success(null, "Lesson saved successfully");
     }
 
@@ -74,7 +73,8 @@ public class LessonService {
         lesson.setFileUrl(reqLesson.getFileUrl());
         lesson.setSubject(subject);
 
-        lessonRepository.save(lesson);
+        Lesson savedLesson = lessonRepository.save(lesson);
+        videoLessonService.createOrUpdateByLesson(savedLesson, reqLesson.getVideoLesson());
         return ApiResponse.success(null, "Lesson updated successfully");
     }
 

@@ -2,7 +2,8 @@ package com.example.bolalarakademiyasi.entity;
 
 import com.example.bolalarakademiyasi.entity.base.BaseEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.*;
 
 @Getter
@@ -20,6 +21,7 @@ public class VideoLesson extends BaseEntity {
     private Long fileSize;        // optional
     private String format;        // mp4, m3u8
 
-    @ManyToOne
+    @OneToOne
+    @JoinColumn(name = "lesson_id", unique = true)
     private Lesson lesson;
 }
