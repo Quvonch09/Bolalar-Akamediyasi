@@ -3,7 +3,6 @@ package com.example.bolalarakademiyasi.entity;
 import com.example.bolalarakademiyasi.entity.base.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.*;
 
 @Getter
@@ -12,17 +11,11 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Lesson extends BaseEntity {
-    private String name;
-
-    private String description;
-
-    private String fileUrl; //dars ishlanmasi
+public class Coin extends BaseEntity {
+    private String feedback;
+    private int coin;
 
     @ManyToOne
-    private Subject subject;
-
-    @OneToOne(mappedBy = "lesson")
-    private VideoLesson videoLesson;
+    private Student student;
 
 }

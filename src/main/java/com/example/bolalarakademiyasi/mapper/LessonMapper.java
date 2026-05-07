@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class LessonMapper {
 
+    private final VideoLessonMapper videoLessonMapper;
 
     public ResLesson toResLesson(Lesson lesson){
         return ResLesson.builder()
@@ -17,6 +18,9 @@ public class LessonMapper {
                 .fileUrl(lesson.getFileUrl())
                 .subjectId(lesson.getSubject() != null ? lesson.getSubject().getId() : null)
                 .subjectName(lesson.getSubject() != null ? lesson.getSubject().getName() : null)
+                .videoLesson(lesson.getVideoLesson() != null && lesson.getVideoLesson().isActive()
+                        ? videoLessonMapper.toResponse(lesson.getVideoLesson())
+                        : null)
                 .build();
     }
 

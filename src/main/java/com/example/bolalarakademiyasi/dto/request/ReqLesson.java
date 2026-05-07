@@ -1,6 +1,7 @@
 package com.example.bolalarakademiyasi.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.UUID;
@@ -19,8 +20,9 @@ public class ReqLesson {
 
     private String fileUrl;
 
-    @NotBlank(message = "Subject ID si bush bulishi mumkin emas")
+    @NotNull(message = "Subject ID si bush bulishi mumkin emas")
     private UUID subjectId;
 
+    private ReqVideoLessonPayload videoLesson;
 
 }

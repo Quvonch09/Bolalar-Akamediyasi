@@ -9,21 +9,15 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-public class ResLesson {
+public class ResVideoLesson {
     private UUID id;
-
-    private String name;
-
-    private String description;
-
-    private String fileUrl;
-
+    private String title;
+    private String videoUrl;
+    private Integer duration;
+    private Long fileSize;
+    private String format;
+    private UUID lessonId;
+    private String lessonName;
     private UUID subjectId;
-
     private String subjectName;
-
-    private ResVideoLesson videoLesson;
-
-
 }
