@@ -14,6 +14,7 @@ import com.example.bolalarakademiyasi.mapper.SubmissionMapper;
 import com.example.bolalarakademiyasi.repository.HomeworkRepository;
 import com.example.bolalarakademiyasi.repository.StudentRepository;
 import com.example.bolalarakademiyasi.repository.SubmissionRepository;
+import com.example.bolalarakademiyasi.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,12 +32,12 @@ public class SubmissionService {
     private final StudentRepository studentRepository;
     private final SubmissionMapper submissionMapper;
 
-    public ApiResponse<String> saveSubmission(ReqSubmission req) {
+    public ApiResponse<String> saveSubmission(CustomUserDetails customUserDetails,ReqSubmission req) {
         Homework homework = homeworkRepository.findByIdAndActiveTrue(req.getHomeworkId()).orElseThrow(
                 () -> new DataNotFoundException("Homework not found")
         );
 
-        Student student = studentRepository.findByIdAndActiveTrue(req.getStudentId()).orElseThrow(
+        Student student = studentRepository.findByIdAndActiveTrue(customUserDetails.getStudent().getId()).orElseThrow(
                 () -> new DataNotFoundException("Student not found")
         );
 

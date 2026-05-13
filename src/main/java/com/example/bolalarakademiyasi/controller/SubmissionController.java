@@ -6,11 +6,14 @@ import com.example.bolalarakademiyasi.dto.request.ReqSubmission;
 import com.example.bolalarakademiyasi.dto.request.ReqUpdateSubmission;
 import com.example.bolalarakademiyasi.dto.response.ResPageable;
 import com.example.bolalarakademiyasi.dto.response.ResSubmission;
+import com.example.bolalarakademiyasi.entity.Student;
+import com.example.bolalarakademiyasi.security.CustomUserDetails;
 import com.example.bolalarakademiyasi.service.SubmissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -26,8 +29,9 @@ public class SubmissionController {
 
 
     @PostMapping
-    public ResponseEntity<ApiResponse<String>> saveSubmission(@RequestBody ReqSubmission req) {
-        return ResponseEntity.ok(submissionService.saveSubmission(req));
+    public ResponseEntity<ApiResponse<String>> saveSubmission(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                              @RequestBody ReqSubmission req) {
+        return ResponseEntity.ok(submissionService.saveSubmission(userDetails,req));
     }
 
     @PutMapping("/{id}/grade")
