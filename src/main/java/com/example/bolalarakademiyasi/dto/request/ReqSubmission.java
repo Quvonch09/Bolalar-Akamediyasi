@@ -21,7 +21,6 @@ public class ReqSubmission {
 
     private String feedback;
 
-    private UUID studentId;
 
     private UUID homeworkId;
 }
